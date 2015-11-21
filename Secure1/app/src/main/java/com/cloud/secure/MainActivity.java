@@ -51,9 +51,13 @@ public class MainActivity extends Activity {
 					+ "\",\"location\":\"" + "east-iiith" + "\"}";
 			try {
 				Log.d("info", input.getBytes().toString());
-				String sessionInfo = postCall(
+
+				new PostTask("http://ec2-52-74-222-81.ap-southeast-1.compute.amazonaws.com:8080/RestService/post/createSessionInfo",
+						input).execute();
+				String sessionInfo="It's done";
+				/*postCall(
 						"http://ec2-52-74-222-81.ap-southeast-1.compute.amazonaws.com:8080/RestService/post/createSessionInfo",
-						input);
+						input);*/
 				Log.d("info", sessionInfo );
 				JSONParser parser = new JSONParser();
 				JSONObject obj = (JSONObject) parser.parse(sessionInfo);
@@ -155,11 +159,20 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-	private class DownloadFilesTask extends AsyncTask<String, Integer, Long> {
-		protected String doInBackground(String urlStr, String input) {
+	private class PostTask extends AsyncTask<Void, String, String> {
+		private String mUrlStr, mInput;
+
+		PostTask(String urlStr, String input){
+			mUrlStr=urlStr;
+			mInput=input;
+
+		}
+
+		@Override
+		protected String doInBackground(Void... params) {
 			try {
 				Log.d("info", "sdasas1");
-				URL url = new URL(urlStr);
+				URL url = new URL(mUrlStr);
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.setDoOutput(true);
 				conn.setRequestMethod("POST");
@@ -167,8 +180,8 @@ public class MainActivity extends Activity {
 
 				OutputStream os = conn.getOutputStream();
 				Log.d("info", "sdasas2");
-				os.write(input.getBytes());
-				Log.d("info", input.getBytes().toString());
+				os.write(mInput.getBytes());
+				Log.d("info", mInput.getBytes().toString());
 				os.flush();
 
 				BufferedReader br = new BufferedReader(new InputStreamReader(
@@ -188,15 +201,13 @@ public class MainActivity extends Activity {
 			catch (Exception e) {
 				Log.d("info", e.getMessage());
 				e.printStackTrace();
+				return "";
 			}
 		}
 
-		protected void onProgressUpdate(Integer... progress) {
-			setProgressPercent(progress[0]);
-		}
-
-		protected void onPostExecute(Long result) {
-			showDialog("Downloaded " + result + " bytes");
+		protected void onPostExecute(String result) {
+			Log.d("info", "Result:" + result);
+			//showDialog("Downloaded " + result + " bytes");
 		}
 	}
 
