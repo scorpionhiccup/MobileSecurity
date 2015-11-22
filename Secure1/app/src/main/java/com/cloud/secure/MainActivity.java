@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+@SuppressWarnings("deprecation")
 public class MainActivity extends Activity {
 	private Camera cam;
 	private CameraPreview camPrev;
@@ -35,22 +36,23 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		Log.d("info", "oioioiio");
+		//Log.d("info", "oioioiio");
 		if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
 			cam = getCameraInstance();
 			camPrev = new CameraPreview(this, cam);
 			FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
 			preview.addView(camPrev);
 
-			Date startTime = new Date();
-			Date endTime = new Date();
-			endTime.setTime(startTime.getTime() + 1000 * 60 * 40);
-			Log.d("info", "lll");
+			String startTime, endTime;
+			startTime = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date());
+			endTime = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date().getTime() + 1000 * 60 * 40);
+
+			//Log.d("info", "lll");
 			String input = "{\"userId\":\"" + "himalaya" + "\",\"startTime\":\""
-					+ "2014-09-23 08:00:00" + "\",\"endTime\":\"" + "2014-09-23 08:29:59"
+					+ startTime + "\",\"endTime\":\"" + endTime
 					+ "\",\"location\":\"" + "east-iiith" + "\"}";
 			try {
-				Log.d("info", input.getBytes().toString());
+				//Log.d("info", input.getBytes().toString());
 
 				new PostTask("http://ec2-52-74-222-81.ap-southeast-1.compute.amazonaws.com:8080/RestService/post/createSessionInfo",
 						input).execute();
@@ -58,7 +60,7 @@ public class MainActivity extends Activity {
 				/*postCall(
 						"http://ec2-52-74-222-81.ap-southeast-1.compute.amazonaws.com:8080/RestService/post/createSessionInfo",
 						input);*/
-				Log.d("info", sessionInfo );
+				//Log.d("info", sessionInfo );
 				JSONParser parser = new JSONParser();
 				JSONObject obj = (JSONObject) parser.parse(sessionInfo);
 				sessionid = (String) obj.get("sessionId");
@@ -106,7 +108,7 @@ public class MainActivity extends Activity {
 		/*
 		 * Utility to make a post call to the server.
 		 */
-		Log.d("info", "sdasas1");
+		//Log.d("info", "sdasas1");
 		URL url = new URL(urlStr);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setDoOutput(true);
@@ -114,14 +116,14 @@ public class MainActivity extends Activity {
 		conn.setRequestProperty("Content-Type", "application/json");
 
 		OutputStream os = conn.getOutputStream();
-		Log.d("info", "sdasas2");
+		//Log.d("info", "sdasas2");
 		os.write(input.getBytes());
-		Log.d("info", input.getBytes().toString());
+		//Log.d("info", input.getBytes().toString());
 		os.flush();
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(
 				(conn.getInputStream())));
-		Log.d("info", "sdasas4");
+		//Log.d("info", "sdasas4");
 		String output;
 		// pw.println("Output from Server .... \n");
 		StringBuffer buff = new StringBuffer();
@@ -129,7 +131,7 @@ public class MainActivity extends Activity {
 			buff.append(output);
 			// pw.println(output);
 		}
-		Log.d("info", "sdasas5");
+		//Log.d("info", "sdasas5");
 		conn.disconnect();
 		return buff.toString();
 	}
@@ -140,11 +142,10 @@ public class MainActivity extends Activity {
 		public void onPictureTaken(byte[] data, Camera camera) {
 			final String base64Data = Base64.encodeToString(data, 0);
 			try {
-				postCall(
-						"http://ec2-52-74-222-81.ap-southeast-1.compute.amazonaws.com:8080/RestService/post/imageInfo",
+				new PostTask("http://ec2-52-74-222-81.ap-southeast-1.compute.amazonaws.com:8080/RestService/post/imageInfo",
 						"{\"userId\":\"" + user + "\",\"sessionId\":\""
 								+ sessionid + "\",\"snapedAt\":\"" + new Date()
-								+ "\",\"data\":\"" + base64Data + "\"}");
+								+ "\",\"data\":\"" + base64Data + "\"}").execute();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -171,7 +172,7 @@ public class MainActivity extends Activity {
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				Log.d("info", "sdasas1");
+				//Log.d("info", "sdasas1");
 				URL url = new URL(mUrlStr);
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.setDoOutput(true);
@@ -179,14 +180,15 @@ public class MainActivity extends Activity {
 				conn.setRequestProperty("Content-Type", "application/json");
 
 				OutputStream os = conn.getOutputStream();
-				Log.d("info", "sdasas2");
-				os.write(mInput.getBytes());
-				Log.d("info", mInput.getBytes().toString());
-				os.flush();
 
-				BufferedReader br = new BufferedReader(new InputStreamReader(
-						(conn.getInputStream())));
-				Log.d("info", "sdasas4");
+				os.write(mInput.getBytes());
+				//Log.d("info", mInput.getBytes().toString());
+				os.flush();
+				//Log.d("info", "sdasas2");
+				InputStreamReader read = new InputStreamReader(conn.getInputStream());
+				//Log.d("info", "sdasas3");
+				BufferedReader br = new BufferedReader(read);
+				//Log.d("info", "sdasas4");
 				String output;
 				// pw.println("Output from Server .... \n");
 				StringBuffer buff = new StringBuffer();
@@ -194,12 +196,12 @@ public class MainActivity extends Activity {
 					buff.append(output);
 					// pw.println(output);
 				}
-				Log.d("info", "sdasas5");
+				//Log.d("info", "sdasas5");
 				conn.disconnect();
 				return buff.toString();
 			}
 			catch (Exception e) {
-				Log.d("info", e.getMessage());
+				Log.e("info", e.getMessage());
 				e.printStackTrace();
 				return "";
 			}
