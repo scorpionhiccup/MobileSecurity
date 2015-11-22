@@ -1,7 +1,6 @@
 package com.cloud.secure;
 
-import com.am
-s.services.s3.AmazonS3Client;
+import com.aws.services.s3.AmazonS3Client;
 
 public class AppGlobals {
 	// fields made empty, for confidentiality.
