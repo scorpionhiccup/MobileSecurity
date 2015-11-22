@@ -118,7 +118,7 @@ Response-
        "location": "centre-iiith",
        "snapedAt": "2014-11-12 0:0:0",
        "imageId": "24ec2bfb-8091-42cb-a4b1-f7e7b9580226",
-       "resourcePath": "https://d3iq5ru0c12fmp88.cloudfront.net/mobilesecurity/canteen_center/dc6c3872-89d6-48ff-8234-8d1245c71381/c1d9cf0f-5076-469e-afc_dc6c3872-89d6-48ff-8d1245c71381_2014_09_23_08_00_00.jpg"
+       "resourcePath": "http://d1o4b71ila6msg.cloudfront.net/mobilesecurity/canteen_center/dc6c3872-89d6-48ff-8234-8d1245c71381/c1d9cf0f-5076-469e-afc_dc6c3872-89d6-48ff-8d1245c71381_2014_09_23_08_00_00.jpg"
       }]
     }]
   }],
