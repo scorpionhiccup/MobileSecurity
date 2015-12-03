@@ -429,7 +429,7 @@ public class SecureUI implements EntryPoint {
 		loginFT.setTitle("This is the panel to key-in your login credentials.");
 		loginFT.setCellPadding(5);
 		loginFT.setCellSpacing(5);
-		final Label userNameLabel = new Label("Your device id*");
+		final Label userNameLabel = new Label("Device id*");
 		userNameLabel.setTitle("Enter your user name");
 		loginFT.getCellFormatter().setAlignment(0, 0,
 				HasHorizontalAlignment.ALIGN_LEFT,

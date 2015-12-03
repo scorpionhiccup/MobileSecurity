@@ -4,5 +4,6 @@
     <string name="app_name">Mobile Security</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="date_format">yyyy-MM-dd hh:mm:ss</string>
 
 </resources>

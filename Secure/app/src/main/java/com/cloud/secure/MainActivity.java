@@ -26,7 +26,6 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-@SuppressWarnings("deprecation")
 public class MainActivity extends Activity {
 	private Camera cam;
 	private CameraPreview camPrev;
@@ -35,7 +34,6 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		//Log.d("info", "oioioiio");
 		if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
 			cam = getCameraInstance();
 			camPrev = new CameraPreview(this, cam);
@@ -43,15 +41,13 @@ public class MainActivity extends Activity {
 			preview.addView(camPrev);
 
 			String startTime, endTime;
-			startTime = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ENGLISH).format(new Date());
-			endTime = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ENGLISH).format(new Date().getTime() + 1000 * 60 * 40);
+			startTime = new SimpleDateFormat(getString(R.string.date_format), Locale.ENGLISH).format(new Date());
+			endTime = new SimpleDateFormat(getString(R.string.date_format), Locale.ENGLISH).format(new Date().getTime() + 1000 * 60 * 40);
 
-			//Log.d("info", "lll");
 			String input = "{\"userId\":\"" + "himalaya" + "\",\"startTime\":\""
 					+ startTime + "\",\"endTime\":\"" + endTime
 					+ "\",\"location\":\"" + "east-iiith" + "\"}";
 			try {
-				//Log.d("info", input.getBytes().toString());
 
 				new PostTask("http://ec2-52-74-222-81.ap-southeast-1.compute.amazonaws.com:8080/RestService/post/createSessionInfo",
 						input).execute();
@@ -62,10 +58,10 @@ public class MainActivity extends Activity {
 				//Log.d("info", sessionInfo );
 				JSONParser parser = new JSONParser();
 				JSONObject obj = (JSONObject) parser.parse(sessionInfo);
-				sessionid = (String) obj.get("sessionId");
+				sessionId = (String) obj.get("sessionId");
 
-				new AlertDialog.Builder(this).setTitle(sessionid)
-						.setMessage(sessionid).show();
+				new AlertDialog.Builder(this).setTitle(sessionId)
+						.setMessage(sessionId).show();
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -80,11 +76,10 @@ public class MainActivity extends Activity {
 		}
 	}
 
-	static String user = "himalaya";
-	static String sessionid = null;
+	private static final String user = "himalaya";
+	private static String sessionId = null;
 
-	class TakePicTask extends TimerTask {
-		@SuppressWarnings("deprecation")
+	private class TakePicTask extends TimerTask {
 		@Override
 		public void run() {
 			cam.takePicture(null, null, jpgCallBack);
@@ -103,7 +98,7 @@ public class MainActivity extends Activity {
 		return camera;
 	}
 
-	PictureCallback jpgCallBack = new PictureCallback() {
+	private final PictureCallback jpgCallBack = new PictureCallback() {
 		@SuppressWarnings("deprecation")
 		@Override
 		public void onPictureTaken(byte[] data, Camera camera) {
@@ -111,7 +106,7 @@ public class MainActivity extends Activity {
 			try {
 				new PostTask("http://ec2-52-74-222-81.ap-southeast-1.compute.amazonaws.com:8080/RestService/post/imageInfo",
 						"{\"userId\":\"" + user + "\",\"sessionId\":\""
-								+ sessionid + "\",\"snapedAt\":\"" + new Date()
+								+ sessionId + "\",\"snapedAt\":\"" + new Date()
 								+ "\",\"data\":\"" + base64Data + "\"}").execute();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -128,7 +123,7 @@ public class MainActivity extends Activity {
 	}
 
 	private class PostTask extends AsyncTask<Void, String, String> {
-		private String mUrlStr, mInput;
+		private final String mUrlStr, mInput;
 
 		PostTask(String urlStr, String input){
 			mUrlStr=urlStr;
@@ -139,7 +134,6 @@ public class MainActivity extends Activity {
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				//Log.d("info", "sdasas1");
 				URL url = new URL(mUrlStr);
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.setDoOutput(true);
@@ -151,11 +145,8 @@ public class MainActivity extends Activity {
 				os.write(mInput.getBytes());
 				//Log.d("info", mInput.getBytes().toString());
 				os.flush();
-				//Log.d("info", "sdasas2");
 				InputStreamReader read = new InputStreamReader(conn.getInputStream());
-				//Log.d("info", "sdasas3");
 				BufferedReader br = new BufferedReader(read);
-				//Log.d("info", "sdasas4");
 				String output;
 				// pw.println("Output from Server .... \n");
 				StringBuilder buff = new StringBuilder();
@@ -163,7 +154,6 @@ public class MainActivity extends Activity {
 					buff.append(output);
 					// pw.println(output);
 				}
-				//Log.d("info", "sdasas5");
 				conn.disconnect();
 				return buff.toString();
 			}

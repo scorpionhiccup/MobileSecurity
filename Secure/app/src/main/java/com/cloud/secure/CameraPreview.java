@@ -10,9 +10,9 @@ import android.view.SurfaceView;
 
 public class CameraPreview extends SurfaceView implements
 		SurfaceHolder.Callback {
-	private SurfaceHolder mSurfaceHolder;
+	private final SurfaceHolder mSurfaceHolder;
 	@SuppressWarnings("deprecation")
-	private Camera cam;
+	private final Camera cam;
 
 	// Constructor that obtains context and camera
 	@SuppressWarnings("deprecation")
