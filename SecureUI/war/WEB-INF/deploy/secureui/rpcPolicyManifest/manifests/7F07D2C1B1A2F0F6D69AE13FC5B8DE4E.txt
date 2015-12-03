@@ -1,0 +1,2 @@
+serviceClass: com.cloud.secure.client.Service
+path: 19251074465D5973DBD228D8AD014155.gwt.rpc

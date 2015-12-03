@@ -1,0 +1,3 @@
+# Module secureui
+# RPC service class, partial path of RPC policy file
+com.cloud.secure.client.Service, 19251074465D5973DBD228D8AD014155.gwt.rpc
